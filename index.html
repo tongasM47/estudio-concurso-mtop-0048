@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Concurso MTOP 0048/2026 – Estudio</title>
+<meta name="description" content="App de estudio para la prueba de oposición del Llamado 0048/2026 MTOP – Gestor Administrativo: resúmenes, ELI5, flashcards, preguntas y simulacros.">
+<meta name="theme-color" content="#1f4e8c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
+  <a class="brand" href="#/"><span class="brand-mark">§</span><span class="brand-text">Concurso MTOP <small>0048/2026</small></span></a>
+  <form class="search" id="searchForm" role="search">
+    <input id="searchInput" type="search" placeholder="Buscar artículo, palabra, plazo…" aria-label="Buscar">
+  </form>
+  <button class="icon-btn" id="themeBtn" aria-label="Cambiar tema">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Navegación">
+    <div class="nav-section">Estudiar</div>
+    <a href="#/" data-nav="home">🏠 Inicio</a>
+    <a href="#/ruta" data-nav="ruta">🗺️ Ruta de estudio</a>
+    <div class="nav-section">Temario</div>
+    <div id="navModules"></div>
+    <div class="nav-section">Practicar</div>
+    <a href="#/flash" data-nav="flash">🃏 Flashcards</a>
+    <a href="#/quiz" data-nav="quiz">❓ Preguntas</a>
+    <a href="#/examen" data-nav="examen">⏱️ Simulacro de examen</a>
+    <a href="#/errores" data-nav="errores">🔁 Mis errores</a>
+    <div class="nav-section">Consultar</div>
+    <a href="#/plazos" data-nav="plazos">📅 Tabla de plazos</a>
+    <a href="#/glosario" data-nav="glosario">📖 Glosario</a>
+    <a href="#/trucos" data-nav="trucos">💡 Reglas mnemotécnicas</a>
+    <a href="#/progreso" data-nav="progreso">📊 Mi progreso</a>
+    <a href="#/acerca" data-nav="acerca">ℹ️ Sobre el llamado</a>
+  </nav>
+  <main id="main" tabindex="-1"><div class="loading">Cargando contenido…</div></main>
+</div>
+<div class="scrim" id="scrim"></div>
+<script src="app.js" defer></script>
+</body>
+</html>
