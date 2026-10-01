@@ -10,6 +10,14 @@ const SYLLABUS = [
   { label: 'TOFUP – arts. 1018-1236', mods: ['tofupa', 'tofupb'] },
 ];
 const NAV_NAMES = { const: 'Constitución', d500a: 'Dec. 500/991 · Parte 1', d500b: 'Dec. 500/991 · Parte 2', d222: 'Dec. 222/014', tocaf: 'TOCAF 26-79', tofupa: 'TOFUP 1018-1103', tofupb: 'TOFUP 1104-1236' };
+const SUPPORT = {
+  bank: 'BROU', holder: 'Gastón Maldonado',
+  accounts: [
+    { label: 'Número de cuenta actual', value: '001798427-00001' },
+    { label: 'Número de cuenta anterior', value: '190-0830950' },
+    { label: 'Para transferencias desde otros bancos', value: '00179842700001' },
+  ],
+};
 const EXAM_START = new Date('2026-10-26T00:00:00-03:00');
 const STORE_KEY = 'mtop0048:v1';
 const DAY = 86400000;
@@ -202,6 +210,7 @@ route(/^\/$/, (el) => {
       <p><b>4. Medí tu nivel</b> con simulacros cronometrados de todo el temario.</p>
       <p class="muted small">Tu progreso se guarda sólo en este navegador. Podés exportarlo o importarlo desde <a href="#/progreso">Mi progreso</a>.</p>
     </div>
+    ${supportCard()}
     <footer class="foot">Contenido elaborado a partir de los textos oficiales (IMPO y ONSC). Material de estudio: ante cualquier duda, prevalece la norma oficial vigente.</footer>`;
 });
 
@@ -612,6 +621,7 @@ route(/^\/examen$/, (el, _, params) => {
     list.forEach((q, k) => { const g = SYLLABUS.find((s) => s.mods.includes(q.mid)).label.split(':')[0]; byMod[g] = byMod[g] || { ok: 0, n: 0 }; byMod[g].n++; if (answers[k] === q.answer) byMod[g].ok++; });
     el.innerHTML = `<h1>Resultado del simulacro</h1>
       <div class="card" style="text-align:center"><div class="result-big">${(50 * score / list.length).toFixed(1)} / 50</div><p>${score} de ${list.length} correctas (${pct(score, list.length)}%) · ${Math.round(dur / 60)} min</p></div>
+      ${pct(score, list.length) >= 70 ? `<div class="support-wink">🎉 ¡Tremendo simulacro! Si la app te está sirviendo, el desarrollador acepta felicitaciones… y también <a href="#/apoyar">transferencias</a>. 😇</div>` : ''}
       <h2>Por norma</h2><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Norma</th><th>Aciertos</th><th>%</th></tr></thead><tbody>${Object.entries(byMod).map(([g, v]) => `<tr><td>${esc(g)}</td><td>${v.ok}/${v.n}</td><td>${pct(v.ok, v.n)}%</td></tr>`).join('')}</tbody></table></div>
       <h2>Corrección</h2>
       ${list.map((q, k) => { const ok = answers[k] === q.answer; return `<div class="card"><div class="qhead"><span>${k + 1}. ${esc(modLabel(q.mid))} · Art. ${esc(q.art || '')}</span><span class="pill ${ok ? 'ok' : 'bad'}">${ok ? 'Correcta' : answers[k] === null ? 'Sin responder' : 'Incorrecta'}</span></div>
@@ -693,6 +703,40 @@ route(/^\/acerca$/, (el) => {
     <p><b>TOCAF:</b> la base TOCAF de IMPO no incorpora todas las reformas legales posteriores a 2012. En los artículos donde la ley de origen tiene redacción más nueva (p. ej. arts. 33, 38, 52), se usó el texto legal vigente y se indica en el resumen del artículo. Si el tribunal toma el texto “histórico” del TOCAF, pueden diferir los montos. Revisá esos artículos con atención.</p>
     <p>Resúmenes, ELI5, flashcards y preguntas son material de estudio elaborado a partir de esos textos; ante cualquier diferencia, prevalece la norma oficial.</p>
   </div>`;
+});
+
+/* ---------- apoyar el proyecto ---------- */
+function supportCard() {
+  return `<div class="support-card">
+    <div class="support-emoji" aria-hidden="true">☕</div>
+    <div><b>¿Te está sirviendo la app?</b>
+    <p>Un “gracias” siempre se agradece… pero el almacén de la esquina todavía no lo acepta como medio de pago. 😅 Si querés apoyar, todo es bienvenido.</p>
+    <a class="btn small primary" href="#/apoyar">Apoyar el proyecto</a></div></div>`;
+}
+route(/^\/apoyar$/, (el) => {
+  el.innerHTML = `<div class="crumbs"><a href="#/">Inicio</a> › Apoyar el proyecto</div>
+    <h1>☕ Apoyar el proyecto</h1>
+    <p class="lead">La app es y va a seguir siendo gratis. Esto es totalmente opcional (en serio… aunque no tanto 😏).</p>
+    <div class="card prose">
+      <p>Detrás de estas 1.698 flashcards y 1.617 preguntas hay muchas horas de leer decretos que nadie lee por gusto. Si la app te ayudó a entender el TOCAF sin llorar, a acordarte de que el sumario tiene 60 días o a sacar un buen simulacro, quizás te quede la duda: <i>“¿cómo le agradezco a esta persona?”</i></p>
+      <p>Y sí, a veces solo las gracias no alcanzan. Las gracias no pagan el mate, ni la yerba, ni el café de las 2 de la mañana repasando el art. 168. <b>Si querés apoyar, todo es bienvenido</b>: desde lo que te sobre del vuelto hasta tu primer sueldo de Gestor Administrativo (es broma… salvo que quieras 😇).</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Datos para transferir</h3>
+      <p class="muted small" style="margin-top:0">${esc(SUPPORT.bank)} · Titular: <b>${esc(SUPPORT.holder)}</b></p>
+      ${SUPPORT.accounts.map((a, i) => `<div class="acct"><div><div class="small muted">${esc(a.label)}</div><div class="acct-num">${esc(a.value)}</div></div>
+        <button class="btn small" data-copy="${i}">📋 Copiar</button></div>`).join('')}
+      <p class="small muted" id="copyMsg" aria-live="polite"></p>
+    </div>
+    <div class="card prose small muted"><p>¿No podés o no querés? Cero drama: compartir la app con quien también se esté preparando para el concurso ya es una tremenda ayuda. Y si quedás en una de las 27 plazas, avisá, que el festejo también cuenta. 🎉</p></div>`;
+  el.addEventListener('click', async (e) => {
+    const i = e.target.closest('[data-copy]')?.dataset.copy;
+    if (i === undefined) return;
+    const v = SUPPORT.accounts[+i].value;
+    let ok = false;
+    try { await navigator.clipboard.writeText(v); ok = true; } catch { /* sin permiso de portapapeles */ }
+    $('#copyMsg', el).textContent = ok ? `Copiado: ${v}. ¡Gracias de antemano! 🙌` : `No pude copiar automáticamente; seleccioná el número a mano: ${v}`;
+  });
 });
 
 /* ---------- navegación lateral ---------- */
