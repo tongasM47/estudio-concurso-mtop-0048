@@ -621,7 +621,7 @@ route(/^\/examen$/, (el, _, params) => {
     list.forEach((q, k) => { const g = SYLLABUS.find((s) => s.mods.includes(q.mid)).label.split(':')[0]; byMod[g] = byMod[g] || { ok: 0, n: 0 }; byMod[g].n++; if (answers[k] === q.answer) byMod[g].ok++; });
     el.innerHTML = `<h1>Resultado del simulacro</h1>
       <div class="card" style="text-align:center"><div class="result-big">${(50 * score / list.length).toFixed(1)} / 50</div><p>${score} de ${list.length} correctas (${pct(score, list.length)}%) · ${Math.round(dur / 60)} min</p></div>
-      ${pct(score, list.length) >= 70 ? `<div class="support-wink">🎉 ¡Tremendo simulacro! Si la app te está sirviendo, el desarrollador acepta felicitaciones… y también <a href="#/apoyar">transferencias</a>. 😇</div>` : ''}
+      ${pct(score, list.length) >= 70 ? `<div class="support-wink">🧉 ¡Golazo! Con esa nota ya te imaginás cobrando el sueldo de Grado 01. Qué casualidad: justo hay una <a href="#/apoyar">yerbita pendiente</a> para el que te armó las flashcards.</div>` : ''}
       <h2>Por norma</h2><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Norma</th><th>Aciertos</th><th>%</th></tr></thead><tbody>${Object.entries(byMod).map(([g, v]) => `<tr><td>${esc(g)}</td><td>${v.ok}/${v.n}</td><td>${pct(v.ok, v.n)}%</td></tr>`).join('')}</tbody></table></div>
       <h2>Corrección</h2>
       ${list.map((q, k) => { const ok = answers[k] === q.answer; return `<div class="card"><div class="qhead"><span>${k + 1}. ${esc(modLabel(q.mid))} · Art. ${esc(q.art || '')}</span><span class="pill ${ok ? 'ok' : 'bad'}">${ok ? 'Correcta' : answers[k] === null ? 'Sin responder' : 'Incorrecta'}</span></div>
@@ -708,18 +708,24 @@ route(/^\/acerca$/, (el) => {
 /* ---------- apoyar el proyecto ---------- */
 function supportCard() {
   return `<div class="support-card">
-    <div class="support-emoji" aria-hidden="true">☕</div>
+    <div class="support-emoji" aria-hidden="true">🧉</div>
     <div><b>¿Te está sirviendo la app?</b>
-    <p>Un “gracias” siempre se agradece… pero el almacén de la esquina todavía no lo acepta como medio de pago. 😅 Si querés apoyar, todo es bienvenido.</p>
+    <p>Las gracias calientan el alma, pero no el agua del mate. 🧉 Si la app te sirve, todo aporte es bienvenido. Y si no aportás nada, tranqui: el karma no tiene plazo de prescripción.</p>
     <a class="btn small primary" href="#/apoyar">Apoyar el proyecto</a></div></div>`;
 }
 route(/^\/apoyar$/, (el) => {
   el.innerHTML = `<div class="crumbs"><a href="#/">Inicio</a> › Apoyar el proyecto</div>
-    <h1>☕ Apoyar el proyecto</h1>
-    <p class="lead">La app es y va a seguir siendo gratis. Esto es totalmente opcional (en serio… aunque no tanto 😏).</p>
+    <h1>🧉 Apoyar el proyecto</h1>
+    <p class="lead">La app es gratis. Tu conciencia, no tanto.</p>
     <div class="card prose">
-      <p>Detrás de estas 1.698 flashcards y 1.617 preguntas hay muchas horas de leer decretos que nadie lee por gusto. Si la app te ayudó a entender el TOCAF sin llorar, a acordarte de que el sumario tiene 60 días o a sacar un buen simulacro, quizás te quede la duda: <i>“¿cómo le agradezco a esta persona?”</i></p>
-      <p>Y sí, a veces solo las gracias no alcanzan. Las gracias no pagan el mate, ni la yerba, ni el café de las 2 de la mañana repasando el art. 168. <b>Si querés apoyar, todo es bienvenido</b>: desde lo que te sobre del vuelto hasta tu primer sueldo de Gestor Administrativo (es broma… salvo que quieras 😇).</p>
+      <p>Esta app se hizo a base de mate frío, café recalentado y una relación tóxica con el art. 168 de la Constitución. Mientras el resto del país miraba series, alguien leía el Decreto 500/991 entero. Por voluntad propia. Sin que nadie se lo pidiera. Pensalo.</p>
+      <p>Si te sirvió, tenés tres opciones:</p>
+      <ul class="support-opts">
+        <li><span aria-hidden="true">☐</span> <b>Decir “gracias”.</b> Precioso, emotivo y con el mismo poder adquisitivo que un boleto vencido.</li>
+        <li><span aria-hidden="true">☐</span> <b>Compartirla con alguien que se presente.</b> Ayuda un montón… y de paso le regalás material de estudio a tu competencia. Genio.</li>
+        <li><span aria-hidden="true">☑</span> <b>Transferir algo.</b> La única de las tres que el almacén acepta.</li>
+      </ul>
+      <p>No hay mínimo: con lo que sale un paquete de yerba ya es un golazo. Con lo que sale un kilo de asado, entrás en mi testamento (vacío, pero simbólico).</p>
     </div>
     <div class="card">
       <h3 style="margin-top:0">Datos para transferir</h3>
@@ -728,14 +734,14 @@ route(/^\/apoyar$/, (el) => {
         <button class="btn small" data-copy="${i}">📋 Copiar</button></div>`).join('')}
       <p class="small muted" id="copyMsg" aria-live="polite"></p>
     </div>
-    <div class="card prose small muted"><p>¿No podés o no querés? Cero drama: compartir la app con quien también se esté preparando para el concurso ya es una tremenda ayuda. Y si quedás en una de las 27 plazas, avisá, que el festejo también cuenta. 🎉</p></div>`;
+    <div class="card prose small muted"><p>¿No vas a donar? Está perfecto, de verdad, cero drama. Igual quedás anotado en un Excel que no existe. 🙂 Y si quedás en una de las 27 plazas sin haber puesto un peso, que tu primer expediente no se traspapele… nadie dijo nada.</p></div>`;
   el.addEventListener('click', async (e) => {
     const i = e.target.closest('[data-copy]')?.dataset.copy;
     if (i === undefined) return;
     const v = SUPPORT.accounts[+i].value;
     let ok = false;
     try { await navigator.clipboard.writeText(v); ok = true; } catch { /* sin permiso de portapapeles */ }
-    $('#copyMsg', el).textContent = ok ? `Copiado: ${v}. ¡Gracias de antemano! 🙌` : `No pude copiar automáticamente; seleccioná el número a mano: ${v}`;
+    $('#copyMsg', el).textContent = ok ? `Copiado: ${v}. Ya diste el primer paso; el segundo es abrir la app del banco. 🙌` : `No pude copiar automáticamente; seleccioná el número a mano: ${v}`;
   });
 });
 
