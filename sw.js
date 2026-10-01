@@ -1,5 +1,5 @@
 // Service worker: funciona sin conexión después de la primera visita.
-const CACHE = 'mtop0048-v3';
+const CACHE = 'mtop0048-v4';
 const ASSETS = ['./', 'index.html', 'styles.css', 'app.js', 'icon.svg', 'manifest.webmanifest',
   'data/const.json', 'data/d500a.json', 'data/d500b.json', 'data/d222.json', 'data/tocaf.json', 'data/tofupa.json', 'data/tofupb.json'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting())); });

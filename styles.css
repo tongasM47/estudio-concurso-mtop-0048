@@ -137,14 +137,6 @@ select,input[type=number],input[type=text].inp{padding:8px 10px;border-radius:8p
 .chip.active{background:var(--primary);border-color:var(--primary);color:#fff}
 :root[data-theme="dark"] .chip.active{color:#0f141b}
 footer.foot{margin-top:40px;color:var(--muted);font-size:.8rem}
-.support-card{display:flex;gap:14px;align-items:flex-start;background:var(--warn-soft);border:1px dashed var(--warn);border-radius:var(--radius);padding:16px 18px;margin:24px 0 8px}
-.support-card p{margin:4px 0 10px}
-.support-emoji{font-size:2rem;line-height:1}
-.support-opts{list-style:none;padding:0;margin:6px 0 12px}.support-opts li{margin:8px 0;padding-left:1.6em;text-indent:-1.6em}
-.support-wink{background:var(--warn-soft);border-radius:10px;padding:12px 14px;margin:12px 0;text-align:center}
-.acct{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--border);flex-wrap:wrap}
-.acct-num{font-family:var(--mono);font-size:1.15rem;font-weight:700;letter-spacing:.02em;word-break:break-all}
-.sidebar a.nav-support{margin-top:6px;border:1px dashed var(--warn);color:var(--warn)}
 @media (max-width:860px){
   #menuBtn{display:inline-block}
   .brand-text small{display:none}
